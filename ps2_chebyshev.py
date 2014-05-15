@@ -38,9 +38,9 @@ def f(z):
     y = z[0] * pow(z[2],3) + z[1] * z[2] + pow(z[0],2) * z[1] * pow(z[2], 2)
     return y
     
-def g(z):
-    y = z[0] * math.log(5 + z[1] * z[2])
-    return y
+#def g(z):
+#    y = z[0] * math.log(5 + z[1] * z[2])
+#    return y
     
 def h(z):
     y = pow(z[0],2) * math.cos(z[1]) * math.exp(z[2])
@@ -52,9 +52,9 @@ y_f = np.zeros(s_size)
 for i in range(s_size):
     y_f[i] = f(X[i])
     
-y_g = np.zeros(s_size)
-for i in range(s_size):
-    y_g[i] = g(X[i])
+#y_g = np.zeros(s_size)
+#for i in range(s_size):
+#    y_g[i] = g(X[i])
 
 y_h = np.zeros(s_size)
 for i in range(s_size):
@@ -64,7 +64,16 @@ for i in range(s_size):
 # since we don't want to calculate theta multiple times,
 # we won't use evaluateChebyshev.py
 
-"""
+
+if D == 1:
+    j = 1
+else:
+    k = 1
+    A = []    
+    while k <= D - 2:
+        A.append(k * pow(D, D - k - 1))
+        k = k + 1
+    j = sum(A) + D
 
 theta_f = coef(f,D,N,M,a,b)
     
@@ -76,8 +85,11 @@ for i in range(s_size):
     
     T = B
     for i in range(D - 1):
-        T = np.kron(T, B)
-
-    y_f_hat[i] = np.dot(T, theta_f)
-
-"""
+        T = np.kron(B, T)
+    
+    t = T[j - 1]
+    t = np.array(t)
+    y_f_hat[i] = sum(t * theta_f)
+    
+print y_f
+print y_f_hat
